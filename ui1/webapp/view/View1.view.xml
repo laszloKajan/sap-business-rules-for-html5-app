@@ -1,0 +1,7 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="ovh.lkajan.blogpost.ui1.controller.View1" displayBlock="true">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <Label text="{config>/MyHtml5appConfiguration/Greeting}, {config>/MyHtml5appConfiguration/Addressee}!" width="100%" id="label0"/>
+        </content>
+    </Page>
+</mvc:View>

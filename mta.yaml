@@ -1,0 +1,105 @@
+_schema-version: '3.2'
+ID: ovh.lkajan.blogpost
+version: 0.0.1
+modules:
+  - name: ovh.lkajan.blogpost-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: ovh.lkajan.blogpost-destination-service
+        parameters:
+          content-target: true
+      - name: ovh.lkajan.blogpost_html_repo_host
+        parameters:
+          service-key:
+            name: ovh.lkajan.blogpost_html_repo_host-key
+      - name: uaa_ovh.lkajan.blogpost
+        parameters:
+          service-key:
+            name: uaa_ovh.lkajan.blogpost-key
+      - name: ovh.lkajan.blogpost-business-rules-svc
+        parameters:
+          service-key:
+            name: ovh.lkajan.blogpost-business-rules-svc-key
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: ovh_lkajan_blogpost_ovh_lkajan_blogpost_html_repo_host
+              ServiceInstanceName: ovh.lkajan.blogpost-html5-app-host-service
+              ServiceKeyName: ovh.lkajan.blogpost_html_repo_host-key
+              sap.cloud.service: ovh.lkajan.blogpost
+            - Name: ovh_lkajan_blogpost_uaa_ovh_lkajan_blogpost
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: ovh.lkajan.blogpost-xsuaa-service
+              ServiceKeyName: uaa_ovh.lkajan.blogpost-key
+              sap.cloud.service: ovh.lkajan.blogpost
+            - Name: ovh_lkajan_blogpost_business_rules_svc
+              Authentication: OAuth2ClientCredentials
+              ServiceInstanceName: ovh.lkajan.blogpost-business-rules-svc
+              ServiceKeyName: ovh.lkajan.blogpost-business-rules-svc-key
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
+  - name: ovh.lkajan.blogpost-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: ovh.lkajan.blogpost_html_repo_host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - ovhlkajanblogpostui1.zip
+          name: ovhlkajanblogpostui1
+          target-path: resources/
+  - name: ovhlkajanblogpostui1
+    type: html5
+    path: ui1
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - 'npm run build:cf'
+      supported-platforms: []
+resources:
+  - name: ovh.lkajan.blogpost-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: 'https://ui5.sap.com'
+            existing_destinations_policy: update
+        version: 1.0.0
+      service: destination
+      service-name: ovh.lkajan.blogpost-destination-service
+      service-plan: lite
+  - name: ovh.lkajan.blogpost_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: ovh.lkajan.blogpost-html5-app-host-service
+      service-plan: app-host
+  - name: uaa_ovh.lkajan.blogpost
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-name: ovh.lkajan.blogpost-xsuaa-service
+      service-plan: application
+  - name: ovh.lkajan.blogpost-business-rules-svc
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: business-rules
+      service-plan: lite # Set 'basic' for non-trial use.
+parameters:
+  deploy_mode: html5-repo
