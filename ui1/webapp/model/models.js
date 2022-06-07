@@ -28,7 +28,7 @@ sap.ui.define([
 
                 if (ruleServiceId) {
                     // Get XSRF token:
-                    // Match with route in xs-app.json, and API definition at [1]:
+                    // Match with route "^/business-rules-runtime/(.*)$" in xs-app.json, and API definition at [1]:
                     //  [1] https://api.sap.com/api/SAP_CF_BusinessRules_Runtime_V2/resource
                     $.ajax({
                         url: "./business-rules-runtime/rules-service/rest/v2/xsrf-token",
@@ -39,11 +39,13 @@ sap.ui.define([
                         // JavaScript snippet from the API Business Hub:
                         var oRequestData = {
                             "RuleServiceId": ruleServiceId,
+                            "RuleServiceRevision": "1",
                             "Vocabulary": [{ "InputElement": true }]
                         };
 
                         $.ajax({
-                            url: "./business-rules-runtime/rules-service/rest/v2/workingset-rule-services",
+                            //url: "./business-rules-runtime/rules-service/rest/v2/workingset-rule-services",
+                            url: "./business-rules-runtime/rules-service/rest/v2/rule-services",
                             method: "POST",
                             headers: {
                                 "DataServiceVersion": "2.0",
@@ -56,7 +58,7 @@ sap.ui.define([
                         }).then(function (data, textStatus, jqXHR) {
                             jQuery.sap.log.debug("loaded configuration from business rules service");
                             //
-                            if(data.Result[0]) {
+                            if (data.Result[0]) {
                                 config.setData(data.Result[0], true);
                             } else {
                                 jQuery.sap.log.error(`unexpected data received: ${JSON.stringify(data)}`);
