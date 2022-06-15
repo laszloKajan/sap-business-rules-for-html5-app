@@ -2,6 +2,13 @@
   "xsappname": "ovh-lkajan-blogpost",
   "tenant-mode": "dedicated",
   "description": "Security profile of called application",
+  "attributes": [
+    { 
+        "name" : "CompanyCode", 
+        "description" : "Company Code", 
+        "valueType" : "string"
+    }
+  ],
   "scopes": [
     {
       "name": "uaa.user",
@@ -10,8 +17,14 @@
   ],
   "role-templates": [
     {
-      "name": "Token_Exchange",
-      "description": "UAA",
+      "name": "Employee",
+      "description": "Employee with company code and UAA scope",
+      "attribute-references": [
+        {
+            "name": "CompanyCode",
+            "default-values" : ["1000"]
+        }
+      ],
       "scope-references": [
         "uaa.user"
       ]
