@@ -1,0 +1,1 @@
+For further information see SAP blog post [How to use the business rules service to configure an HTML5 application?](https://blogs.sap.com/2022/06/07/how-to-use-the-business-rules-service-to-configure-an-html5-application/).
