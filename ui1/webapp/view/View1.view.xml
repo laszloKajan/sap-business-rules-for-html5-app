@@ -2,6 +2,8 @@
     <Page id="page" title="{i18n>title}">
         <content>
             <Label text="{config>/MyHtml5appConfiguration/Greeting}, {config>/MyHtml5appConfiguration/Addressee}!" width="100%" id="label0"/>
+            <Label text="Company code(s) of logged-in user:" width="100%" id="label0_1655292479651"/>
+            <Label text="{=${/oLoggedinUser/aCompanyCodes}.join(', ')}" width="100%" id="label1"/>
         </content>
     </Page>
 </mvc:View>
