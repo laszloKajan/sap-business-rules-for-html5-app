@@ -20,6 +20,20 @@ sap.ui.define([
                 return oModel;
             },
 
+            getUserAttributes: function() {
+                const oRes = new Promise((resolve, reject) => {
+                    // App router 'User API Service' https://www.npmjs.com/package/@sap/approuter#user-api-service
+                    $.ajax({
+                        url: "./user-api/attributes"
+                    }).then(function (data, textStatus, jqXHR) {
+                        resolve(data);
+                    }, function (jqXHR, textStatus, errorThrown) {
+                        jQuery.sap.log.error(jqXHR.responseText);
+                    });
+                });
+                return oRes;
+            },
+
             loadConfigModelAsync: function (component) {
                 let config = component.getModel("config");
                 config.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);

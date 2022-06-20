@@ -9,6 +9,7 @@
         "undeploy": "cf undeploy ovh-lkajan-blogpost --delete-services --delete-service-keys"
     },
     "devDependencies": {
+        "@sap/approuter": "^11.2.1",
         "mbt": "^1.0.15",
         "rimraf": "3.0.0"
     }

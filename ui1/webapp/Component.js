@@ -30,7 +30,9 @@ sap.ui.define([
                 models.loadConfigModelAsync(this);
 
                 // Company code attribute(s) of logged-in user - how to obtain it?
-                this.getModel().setProperty('/oLoggedinUser', {aCompanyCodes: ["How", "to", "obtain", "it?"]});
+                models.getUserAttributes().then((oAttributes) => {
+                    this.getModel().setProperty('/oLoggedinUserAttributes', oAttributes);
+                });
             }
         });
     }
